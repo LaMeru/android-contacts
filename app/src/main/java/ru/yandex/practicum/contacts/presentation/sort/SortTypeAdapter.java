@@ -17,13 +17,15 @@ import java.util.function.Consumer;
 
 import ru.yandex.practicum.contacts.R;
 import ru.yandex.practicum.contacts.databinding.ItemSortBinding;
+import ru.yandex.practicum.contacts.presentation.base.BaseListDiffCallback;
+import ru.yandex.practicum.contacts.presentation.base.ListDiffInterface;
 import ru.yandex.practicum.contacts.presentation.sort.model.SortType;
 
 public class SortTypeAdapter extends RecyclerView.Adapter<SortTypeAdapter.ViewHolder> {
 
     private final AsyncListDiffer<SortTypeUI> differ = new AsyncListDiffer<>(
             new AdapterListUpdateCallback(this),
-            new AsyncDifferConfig.Builder<>(new ListDiffCallback()).build()
+            new AsyncDifferConfig.Builder<>(new BaseListDiffCallback<SortTypeUI>).build()
     );
 
     private final Consumer<SortTypeUI> clickListener;
@@ -89,7 +91,7 @@ public class SortTypeAdapter extends RecyclerView.Adapter<SortTypeAdapter.ViewHo
         }
     }
 
-    static class ListDiffCallback extends DiffUtil.ItemCallback<SortTypeUI> {
+    /*static class ListDiffCallback extends DiffUtil.ItemCallback<SortTypeUI> {
 
         @Override
         public boolean areItemsTheSame(@NonNull SortTypeUI oldItem, @NonNull SortTypeUI newItem) {
@@ -105,6 +107,13 @@ public class SortTypeAdapter extends RecyclerView.Adapter<SortTypeAdapter.ViewHo
         @Override
         public Object getChangePayload(@NonNull SortTypeUI oldItem, @NonNull SortTypeUI newItem) {
             return newItem;
+        }
+    }*/
+
+    class ListDiffSortTypeAdapter implements ListDiffInterface <SortTypeUI> {
+        @Override
+        public boolean theSameAs (SortTypeUI item) {
+            return this.hashCode() == item.hashCode();
         }
     }
 }
